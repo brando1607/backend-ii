@@ -1,0 +1,25 @@
+<div>
+    <h1> Password reset </h1>
+    <form action="/api/auth/cambiar-contrasena" method="POST">
+        <div>
+            <label for="text"> How old are you? </label>
+            <input type="test" name="age" />
+        </div>
+        <div>
+            <label for="email"> Email </label>
+            <input type="email" name="email" />
+        </div>
+
+        <div>
+            <label for="password"> New password </label>
+            <input type="password" name="password" />
+        </div>
+        <button type="submit"> Change password </button>
+    </form>
+
+    <div class="mt-3">
+        <a href="/register"> Register </a>
+        <a href="/login"> Login </a>
+        <a href="/"> Home </a>
+    </div>
+</div>

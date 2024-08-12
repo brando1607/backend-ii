@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+    <div>
+      <h1> {{user.first_name}} {{user.last_name}}'s profile </h1>
+    </div>
+    <div>
+
+      <ul>
+        <li> {{user.age}} </li>
+        <li>{{user.email}} </li>
+      </ul>
+    </div>
+
+    {{#if seller}}
+    <a href="add-products">Add products </a>
+
+    {{/if}}
+
+    <div>
+      <a href="/"> Home </a>
+      <a href="/api/auth/logout"> Logout</a>
+      <a href="/cart">Go to cart</a>
+    </div>
+  </div>
+</body>
+
+</html>

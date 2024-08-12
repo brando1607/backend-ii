@@ -1,0 +1,33 @@
+<div>
+    <h1> Welcome to the virtual store</h1>
+</div>
+<div>
+    <a href="/login">Login</a>
+    <a href="/register">Register</a>
+
+    <a href="/change-password">Forgot your passowrd?</a>
+</div>
+</div>
+
+{{#if thereAreProducts}}
+
+{{#each products}}
+
+<div class="product">
+    <div class="input-container">
+        Name <input class="productElement" type="text" name="name" value="{{this.name}}" readonly>
+
+    </div>
+    <div class="input-container">
+        Price $<input class="productElement" type="text" name="price" value=" {{this.price}}" readonly>
+
+    </div>
+    <div class="input-container">
+        Available<input class="productElement" type="text" name="stock" value="{{this.stock}}" readonly>
+    </div>
+    <button> <a href="/login"> Login to add to cart </a> </button>
+</div>
+
+{{/each}}
+
+{{/if}}
