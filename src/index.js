@@ -10,6 +10,7 @@ import { productsRouter } from "./routes/products.routes.js";
 import passport from "passport";
 import { initializePassport } from "./config/passport.config.js";
 import { _dirname } from "./dirname.js";
+import { config } from "./config/config.js";
 import path from "path";
 
 //Express config
@@ -27,9 +28,7 @@ handlebars.create({ strict: false });
 
 //mongo config
 mongoose
-  .connect(
-    "mongodb+srv://brandodavid16:brando16@coderhouse.sjxaxsx.mongodb.net/?retryWrites=true&w=majority&appName=coderHouse"
-  )
+  .connect(config.MONGO_URI)
   .then(() => console.log("DB connected"))
   .catch((error) => console.log({ error: error.message }));
 
@@ -45,6 +44,6 @@ initializePassport();
 app.use(passport.initialize());
 
 //Servidor
-app.listen(3000, () => {
-  console.log(`Server listening on port http://localhost:3000`);
+app.listen(config.PORT, () => {
+  console.log(`Server listening on port http://localhost:${config.PORT}`);
 });
