@@ -1,2 +1,4 @@
-node_modules/
+/primer-entregable/node_modules/
+/proyecto-final/node_modules/
 .env
+.DS_Store
