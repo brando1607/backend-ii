@@ -1,0 +1,23 @@
+.productElement {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  max-width: fit-content;
+}
+
+.product {
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
+  gap: 5px;
+}
+.input-container {
+  display: flex;
+  align-items: center;
+  gap: 10px; 
+}
+
+button {
+  max-width: fit-content;
+}

@@ -1,0 +1,37 @@
+<body>
+    <h1>Cart</h1>
+
+    {{#if cartIsEmpty}}
+    <h2>Cart is empty</h2>
+
+    <p> Add products on the <a href="/"> home page </a> </p>
+
+    {{else}}
+    <div>
+        <form action="/api/cart/check-out" method="POST">
+            {{#each productsDetails}}
+
+            <div class="product">
+                Name <input class="productElement" type="text" name="name" value="{{this.product.name}}" readonly>
+                Amount to purchase <input class="productElement" class="amount" type="text" name="amount"
+                    value="{{this.quantity}}" readonly>
+                <button type="button" class="btn"> Remove one </button>
+                <button type="button" class="btn2"> Remove all </button>
+                Total to pay <input class="productElement" type="text" name="price" value="${{this.totalToPay}}"
+                    readonly>
+            </div>
+
+            {{/each}}
+
+            <p>Total in cart ${{totalInCart}} </p>
+            <button> Pay </button>
+        </form>
+
+    </div>
+
+    <p> Would like to add more products? Go to <a href="/"> Home </a> </p>
+
+    {{/if}}
+
+    <script src="/index.js"></script>
+</body>

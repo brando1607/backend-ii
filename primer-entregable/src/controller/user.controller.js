@@ -50,7 +50,7 @@ export class UserController {
       );
 
       //return res.redirect("/login");
-      return res.status(201).json({ message: "Usuario creado" });
+      return res.status(201).json({ message: "Password changed" });
     } catch (error) {
       return res.status(500).send(error);
     }
