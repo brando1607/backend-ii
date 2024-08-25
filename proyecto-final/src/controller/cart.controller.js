@@ -2,7 +2,7 @@ import { cartModel } from "../model/cart.model.js";
 import { productModel } from "../model/products.model.js";
 import { userModel } from "../model/user.model.js";
 import { verifyToken } from "../utils/jwt.js";
-import { getUserGart } from "../utils/functions.js";
+import { getUserGart } from "../utils/reusable-functions.js";
 
 export class CartController {
   static async removeItems(req, res) {
@@ -41,7 +41,8 @@ export class CartController {
   }
   static async checkOut(req, res) {
     try {
-      const productsInCart = [req.body].flat();
+      const { name, amount, price } = req.body;
+      const productsInCart = [req.body];
 
       const userCart = await getUserGart(
         req,
@@ -51,19 +52,49 @@ export class CartController {
       );
 
       userCart.products.splice(0);
-      userCart.save();
+      await userCart.save();
 
-      for (let i = 0; i < [productsInCart[0].name].flat().length; i++) {
-        const productName = [productsInCart[0].name].flat()[i];
-        const amountToSell = [productsInCart[0].amount].flat()[i];
+      // const promises = [productsInCart[0].name].flat().map(async (e) => {
+      //   const productName = [e.name].flat();
+      //   const amountToSell = [e.amount].flat();
 
-        const product = await productModel.findOne({ name: productName });
+      //   const product = await productModel.findOne({ name: productName });
 
-        await productModel.findOneAndUpdate(
-          { name: productName },
-          { stock: product.stock - amountToSell }
-        );
-      }
+      //   product.stock -= amountToSell;
+      //   return await product.save();
+      // });
+
+      const productsSample = req.body.products;
+      // console.log(productsSample);
+
+      const promises = productsSample.map(async (e) => {
+        const product = await productModel.findOne({ name: e.name });
+        product.stock -= e.amount;
+        return product.save();
+      });
+
+      await Promise.all(promises);
+
+      // console.log(promises);
+
+      // console.log(productsSample);
+
+      // const promises = [productsInCart[0].name].flat().map(async (e) => {
+      //   const productName = e;
+      // });
+
+      // for (let i = 0; i < [productsInCart[0].name].flat().length; i++) {
+      // const productName = [productsInCart[0].name].flat()[i];
+      // const amountToSell = [productsInCart[0].amount].flat()[i];
+      // const product = await productModel.findOne({ name: productName });
+      // product.stock -= amountToSell;
+      // await product.save();
+      // await productModel.findOneAndUpdate(
+      //   { name: productName },
+      //   { stock: product.stock - amountToSell }
+      // );
+      // }
+
       res.redirect("/checkout");
     } catch (error) {
       console.error(error);

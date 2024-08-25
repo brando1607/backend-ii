@@ -12,6 +12,9 @@
             {{#each productsDetails}}
 
             <div class="product">
+                <input type="hidden" name="products[{{@index}}][id]" value="{{this.product._id}}">
+                <input type="hidden" name="products[{{@index}}][name]" value="{{this.product.name}}">
+                <input type="hidden" name="products[{{@index}}][amount]" value="{{this.quantity}}">
                 Name <input class="productElement" type="text" name="name" value="{{this.product.name}}" readonly>
                 Amount to purchase <input class="productElement" class="amount" type="text" name="amount"
                     value="{{this.quantity}}" readonly>
