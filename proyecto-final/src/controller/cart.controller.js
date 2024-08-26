@@ -41,9 +41,6 @@ export class CartController {
   }
   static async checkOut(req, res) {
     try {
-      const { name, amount, price } = req.body;
-      const productsInCart = [req.body];
-
       const userCart = await getUserGart(
         req,
         verifyToken,
@@ -54,46 +51,15 @@ export class CartController {
       userCart.products.splice(0);
       await userCart.save();
 
-      // const promises = [productsInCart[0].name].flat().map(async (e) => {
-      //   const productName = [e.name].flat();
-      //   const amountToSell = [e.amount].flat();
+      const products = req.body.products;
 
-      //   const product = await productModel.findOne({ name: productName });
-
-      //   product.stock -= amountToSell;
-      //   return await product.save();
-      // });
-
-      const productsSample = req.body.products;
-      // console.log(productsSample);
-
-      const promises = productsSample.map(async (e) => {
+      const promises = products.map(async (e) => {
         const product = await productModel.findOne({ name: e.name });
         product.stock -= e.amount;
         return product.save();
       });
 
       await Promise.all(promises);
-
-      // console.log(promises);
-
-      // console.log(productsSample);
-
-      // const promises = [productsInCart[0].name].flat().map(async (e) => {
-      //   const productName = e;
-      // });
-
-      // for (let i = 0; i < [productsInCart[0].name].flat().length; i++) {
-      // const productName = [productsInCart[0].name].flat()[i];
-      // const amountToSell = [productsInCart[0].amount].flat()[i];
-      // const product = await productModel.findOne({ name: productName });
-      // product.stock -= amountToSell;
-      // await product.save();
-      // await productModel.findOneAndUpdate(
-      //   { name: productName },
-      //   { stock: product.stock - amountToSell }
-      // );
-      // }
 
       res.redirect("/checkout");
     } catch (error) {
