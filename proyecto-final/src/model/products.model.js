@@ -13,6 +13,7 @@ const productsSchema = new mongoose.Schema({
     type: Number,
     require: true,
   },
+  seller: { type: String, required: true },
 });
 
 //middlewares

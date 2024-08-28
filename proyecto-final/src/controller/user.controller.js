@@ -2,21 +2,21 @@ import { userModel } from "../model/user.model.js";
 import { createHash } from "../utils/hashPassword.js";
 
 export class UserController {
-  static async register(req, res) {
-    // return res.redirect("/login");
-    return res.status(200).send({ message: "user created" });
+  static async getAll(req, res) {
+    try {
+      return res.send(await userModel.find());
+    } catch (error) {
+      console.error(error);
+    }
   }
-  static registerFail(req, res) {
-    //return res.redirect('/registerError')
-    return res.status(401).send(`Register not successul`);
-  }
-
-  static async delete(req, res) {
-    const id = req.params.id;
-
-    const user = await userModel.findById(id);
-    await user.deleteOne();
-    return res.send(`user deleted`);
+  static async getById(req, res) {
+    const { id } = req.params;
+    try {
+      const user = await userModel.findById(id);
+      return res.status(200).send(user);
+    } catch (error) {
+      console.error(error);
+    }
   }
   static async changePassword(req, res) {
     const { password, age, email } = req.body;
@@ -54,5 +54,18 @@ export class UserController {
     } catch (error) {
       return res.status(500).send(error);
     }
+  }
+  static async logout(req, res) {
+    res.cookie("token", "", { expires: new Date(0) });
+
+    // return res.redirect("/login");
+    return res.status(200).send({ message: "Logged out" });
+  }
+  static async delete(req, res) {
+    const id = req.params.id;
+
+    const user = await userModel.findById(id);
+    await user.deleteOne();
+    return res.send(`user deleted`);
   }
 }

@@ -1,6 +1,15 @@
 import { generateToken } from "../utils/jwt.js";
 
 export class AuthController {
+  static async register(req, res) {
+    // return res.redirect("/login");
+    return res.status(200).send({ message: "user created", user: req.user });
+  }
+  static registerFail(req, res) {
+    //return res.redirect('/registerError')
+    return res.status(401).send(`Register not successul`);
+  }
+
   static async login(req, res) {
     const payload = {
       email: req.user.email,
@@ -21,17 +30,10 @@ export class AuthController {
   }
   static loginError(req, res) {
     //return res.redirect('/loginError')
-    return res.status(401).send(`Login not successul`);
+    return res.status(401).send(`Login not successfull`);
   }
   static async current(req, res) {
     // return res.redirect("/current");
     return res.status(200).send({ message: "user logged in", user: req.user });
-  }
-
-  static async logout(req, res) {
-    res.cookie("token", "", { expires: new Date(0) });
-
-    // return res.redirect("/login");
-    return res.status(200).send({ message: "Logged out" });
   }
 }

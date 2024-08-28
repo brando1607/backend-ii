@@ -23,9 +23,16 @@
     <div class="input-container">
         Available<input class="productElement" type="text" name="stock" value="{{this.stock}}" readonly>
     </div>
+    <div class="input-container">
+        Sold by<input class="productElement" type="text" name="seller" value="{{this.seller}}" readonly>
+    </div>
+
     <button> <a href="/login"> Login to add to cart </a> </button>
 </div>
 
 {{/each}}
+
+{{else}}
+<p>There aren't any products at the moment</p>
 
 {{/if}}

@@ -7,7 +7,7 @@ import {
   ExtractJwt as ExtractJWT,
 } from "passport-jwt";
 import { SECRET_TOKEN } from "../utils/jwt.js";
-import { verificarPassword } from "../utils/hashPassword.js";
+import { verifyPassword } from "../utils/hashPassword.js";
 
 export function initializePassport() {
   passport.use(
@@ -56,12 +56,9 @@ export function initializePassport() {
             return done(null, false, { message: "User not found" });
           }
 
-          const contrasenaValida = await verificarPassword(
-            password,
-            user.password
-          );
+          const validPassword = await verifyPassword(password, user.password);
 
-          if (!contrasenaValida) {
+          if (!validPassword) {
             return done(null, false, { message: "Password not valid" });
           }
 

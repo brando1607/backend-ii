@@ -11,7 +11,7 @@
 
 {{#each products}}
 
-<form action="/api/products/add-to-cart" method="POST">
+<form action="/api/cart/add-to-cart" method="POST">
     <div class="product">
 
         <div class="input-container">
@@ -25,10 +25,15 @@
         <div class="input-container">
             Available<input class="productElement" type="text" name="stock" value="{{this.stock}}" readonly>
         </div>
+        <div class="input-container">
+            Sold by<input class="productElement" type="text" name="seller" value="{{this.seller}}" readonly>
+        </div>
 
         <button> Add to cart</button>
     </div>
 </form>
 
 {{/each}}
+{{else}}
+<p>There aren't any products at the moment</p>
 {{/if}}

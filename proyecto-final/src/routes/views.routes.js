@@ -1,6 +1,4 @@
 import { Router } from "express";
-import { passportCall } from "../middlewares/passport.middleware.js";
-import { UserController } from "../controller/user.controller.js";
 import { verifyToken } from "../utils/jwt.js";
 import { productModel } from "../model/products.model.js";
 import { cartModel } from "../model/cart.model.js";
