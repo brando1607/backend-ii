@@ -19,4 +19,21 @@ export class ProductsController {
     });
     res.redirect("/");
   }
+  static async getAll(req, res) {
+    try {
+      const products = await productModel.find();
+      return res.status(200).send(products);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  static async getById(req, res) {
+    const { id } = req.params;
+    try {
+      const product = await productModel.findById(id);
+      return res.status(200).send(product);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }

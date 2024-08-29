@@ -28,7 +28,7 @@ export class CartController {
       console.error();
     }
   }
-  static async add(req, res) {
+  static async addProduct(req, res) {
     const tokenData = verifyToken(req.cookies.token);
     try {
       const user = await userModel.findOne({ email: tokenData.email });
@@ -67,13 +67,14 @@ export class CartController {
         await userCart.save();
       }
 
-      return res.redirect("/product-added");
+      // return res.redirect("/product-added");
+      return res.status(200).send({ message: "product added", userCart });
     } catch (error) {
       console.error(error);
     }
   }
 
-  static async removeItems(req, res) {
+  static async removeProduct(req, res) {
     try {
       const { product, amount } = req.body;
 
@@ -98,35 +99,38 @@ export class CartController {
         userCart.save();
       }
 
-      return res.status(200).redirect("/product-removed");
+      // return res.status(200).redirect("/product-removed");
+      return res.status(200).send({ message: "product(s) removed", userCart });
     } catch (error) {
       console.error(error);
     }
   }
   static async purchase(req, res) {
     try {
-      const userCart = await getUserCart(
-        req,
-        verifyToken,
-        userModel,
-        cartModel
-      );
+      const userCart = await cartModel.findById(req.params.id);
+
+      const promises = userCart.products.map(async (e) => {
+        return await productModel.findById(e._id);
+      });
+
+      const productsInCart = await Promise.all(promises);
+
+      //update stock
+
+      productsInCart.forEach(async (purchase) => {
+        const product = userCart.products.find(
+          (p) => p._id.toString() === purchase._id.toString()
+        );
+
+        purchase.stock -= product.quantity;
+        await purchase.save();
+      });
 
       userCart.products.splice(0);
       await userCart.save();
 
-      //get elements sent from the frontend - product id, name and amount in cart
-      const products = req.body.products;
-
-      const promises = products.map(async (e) => {
-        const product = await productModel.findOne({ name: e.name });
-        product.stock -= e.amount;
-        return product.save();
-      });
-
-      await Promise.all(promises);
-
-      res.redirect("/checkout");
+      // res.redirect("/checkout");
+      return res.status(200).send({ message: "purchase completed" });
     } catch (error) {
       console.error(error);
     }

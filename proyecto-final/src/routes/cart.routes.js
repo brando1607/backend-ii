@@ -3,11 +3,11 @@ import { CartController } from "../controller/cart.controller.js";
 
 export const cartRouter = Router();
 
-cartRouter.post("/remove-item", CartController.removeItems);
+cartRouter.post("/remove-product", CartController.removeProduct);
 
-cartRouter.post("/purchase", CartController.purchase);
+cartRouter.post("/:id/purchase", CartController.purchase);
 
-cartRouter.post("/add-to-cart", CartController.add);
+cartRouter.post("/add-to-cart", CartController.addProduct);
 
 cartRouter.delete("/:id", CartController.delete);
 
