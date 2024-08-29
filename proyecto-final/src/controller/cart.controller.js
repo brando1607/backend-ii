@@ -103,7 +103,7 @@ export class CartController {
       console.error(error);
     }
   }
-  static async checkOut(req, res) {
+  static async purchase(req, res) {
     try {
       const userCart = await getUserCart(
         req,

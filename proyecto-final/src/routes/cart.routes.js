@@ -5,7 +5,7 @@ export const cartRouter = Router();
 
 cartRouter.post("/remove-item", CartController.removeItems);
 
-cartRouter.post("/check-out", CartController.checkOut);
+cartRouter.post("/purchase", CartController.purchase);
 
 cartRouter.post("/add-to-cart", CartController.add);
 
