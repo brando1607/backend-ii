@@ -5,6 +5,14 @@ import { verifyToken } from "../utils/jwt.js";
 import { getUserCart } from "../utils/reusable-functions.js";
 
 export class CartController {
+  static async getAll(req, res) {
+    try {
+      const carts = await cartModel.find();
+      return res.send(carts);
+    } catch (error) {
+      console.error(error);
+    }
+  }
   static async create(req, res) {
     const tokenData = verifyToken(req.cookies.token);
     const user = await userModel.findOne({ email: tokenData.email });
@@ -76,30 +84,47 @@ export class CartController {
 
   static async removeProduct(req, res) {
     try {
-      const { product, amount } = req.body;
+      const { productId, amountToRemove, cartId } = req.params;
 
-      const userCart = await getUserCart(
-        req,
-        verifyToken,
-        userModel,
-        cartModel
-      );
-
-      const itemToRemove = await productModel.findOne({ name: product });
+      const userCart = await cartModel.findById(cartId);
+      const itemToRemove = await productModel.findById(productId);
       const productIndex = userCart.products.findIndex(
         (e) => e._id.toString() === itemToRemove._id.toString()
       );
-      const removeAllProducts = amount ? true : false;
 
-      if (removeAllProducts) {
-        userCart.products.splice(productIndex, 1);
-        userCart.save();
-      } else {
-        userCart.products[productIndex].quantity -= 1;
-        userCart.save();
+      if (amountToRemove < 1) {
+        return res.send(`Amount to remove has to be at least one.`);
       }
 
+      const productIsInCart = userCart.products.filter(
+        (e) => e._id.toString() === productId
+      );
+
+      if (productIsInCart.length === 0) {
+        return res.status(404).send("product not in cart");
+      }
+
+      userCart.products[productIndex].quantity -= Number(amountToRemove);
+
+      //update amount of products in cart
+
+      const updatedProductsInCart = userCart.products.filter(
+        (e) => e.quantity > 0
+      );
+
+      userCart.products = updatedProductsInCart;
+      userCart.save();
+
       // return res.status(200).redirect("/product-removed");
+
+      if (userCart.products.length === 0) {
+        return res.status(200).send({
+          message:
+            "cart has been emptied. Go back to the home page to add more",
+          userCart,
+        });
+      }
+
       return res.status(200).send({ message: "product(s) removed", userCart });
     } catch (error) {
       console.error(error);

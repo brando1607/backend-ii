@@ -18,13 +18,13 @@ const productsSchema = new mongoose.Schema({
 
 //middlewares
 
-productsSchema.post("save", async function (next) {
+productsSchema.post("save", async function () {
   try {
     if (this.stock < 1) {
       await this.constructor.findByIdAndDelete(this._id);
     }
   } catch (error) {
-    next(error);
+    console.error(error);
   }
 });
 
