@@ -2,7 +2,6 @@ import { Router } from "express";
 import passport from "passport";
 import { passportCall } from "../middlewares/passport.middleware.js";
 import { AuthController } from "../controller/auth.controller.js";
-import { UserController } from "../controller/user.controller.js";
 
 export const authRouter = Router();
 
@@ -15,7 +14,7 @@ authRouter.post(
   AuthController.register
 );
 
-authRouter.get("/register-fail", AuthController.registerFail);
+authRouter.post("/register-fail", AuthController.registerFail);
 
 authRouter.post(
   "/login",
@@ -26,7 +25,7 @@ authRouter.post(
   AuthController.login
 );
 
-authRouter.get("/login-error", AuthController.loginError);
+authRouter.post("/login-error", AuthController.loginError);
 
 authRouter.get(
   "/current",

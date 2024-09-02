@@ -33,23 +33,22 @@ export class UserController {
       if (elementsToChange.includes("password")) {
         const newPassword = await createHash(body.password);
 
-        await userModel.findOneAndUpdate(
-          { id: id },
-          {
-            password: newPassword,
-          }
-        );
+        await userModel.findByIdAndUpdate(id, {
+          password: newPassword,
+        });
       }
 
-      const updateElements = elementsToChange
-        .filter((e) => e !== "password")
-        .map(async (e) => {
-          return await userModel.findByIdAndUpdate(
-            { id },
-            { e: `${body}[${e}]` }
-          );
-        });
-      await Promise.all(updateElements);
+      const updatesToUser = {};
+
+      elementsToChange.forEach((e) => {
+        if (e !== "password") {
+          updatesToUser[e] = body[e];
+        }
+      });
+
+      if (Object.keys(updatesToUser).length > 0) {
+        await userModel.findByIdAndUpdate(id, updatesToUser, { new: true });
+      }
 
       //return res.redirect("/login");
       return res.status(201).json({ message: `${elementsToChange} changed` });

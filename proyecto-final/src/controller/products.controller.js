@@ -7,17 +7,20 @@ export class ProductsController {
 
     const { name, price, stock } = req.body;
 
+    if (!tokenData) return res.send(`can't create product if not logged in`);
+
     if (!name || !price || !stock) {
       return res.send("All elements are required");
     }
 
-    await productModel.create({
+    const product = await productModel.create({
       name,
       price,
       stock,
       seller: `${tokenData.first_name} ${tokenData.last_name}`,
     });
-    res.redirect("/");
+    // res.redirect("/");
+    return res.status(200).send({ message: "product created", product });
   }
   static async getAll(req, res) {
     try {
