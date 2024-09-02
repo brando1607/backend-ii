@@ -18,39 +18,41 @@ export class UserController {
       console.error(error);
     }
   }
-  static async changePassword(req, res) {
-    const { password, age, email } = req.body;
-
-    if (!password || !age) {
-      return res.status(400).send(`All elements are mandatory`);
-    }
+  static async update(req, res) {
+    const { id } = req.params;
+    const body = req.body;
+    const elementsToChange = Object.keys(body);
 
     try {
-      const user = await userModel.findOne({ email });
+      const user = await userModel.findById(id);
 
       if (!user) {
         return res.status(400).send(`User not found`);
       }
 
-      const ageIsCorrect = user.age === Number(age);
+      if (elementsToChange.includes("password")) {
+        const newPassword = await createHash(body.password);
 
-      if (!ageIsCorrect) {
-        return res
-          .status(401)
-          .send(`Age is not valid, password can't be changed.`);
+        await userModel.findOneAndUpdate(
+          { id: id },
+          {
+            password: newPassword,
+          }
+        );
       }
 
-      const newPassword = await createHash(password);
-
-      await userModel.findOneAndUpdate(
-        { email: email },
-        {
-          password: newPassword,
-        }
-      );
+      const updateElements = elementsToChange
+        .filter((e) => e !== "password")
+        .map(async (e) => {
+          return await userModel.findByIdAndUpdate(
+            { id },
+            { e: `${body}[${e}]` }
+          );
+        });
+      await Promise.all(updateElements);
 
       //return res.redirect("/login");
-      return res.status(201).json({ message: "Password changed" });
+      return res.status(201).json({ message: `${elementsToChange} changed` });
     } catch (error) {
       return res.status(500).send(error);
     }

@@ -5,10 +5,11 @@ import { verifyToken } from "../utils/jwt.js";
 import { getUserCart } from "../utils/reusable-functions.js";
 
 export class CartController {
-  static async getAll(req, res) {
+  static async getById(req, res) {
+    const { id } = req.params;
     try {
-      const carts = await cartModel.find();
-      return res.send(carts);
+      const userCart = await cartModel.findById(id);
+      return res.send(userCart);
     } catch (error) {
       console.error(error);
     }

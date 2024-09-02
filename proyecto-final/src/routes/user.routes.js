@@ -11,4 +11,6 @@ userRouter.get("/:id", UserController.getById);
 
 userRouter.delete("/delete/:id", UserController.delete);
 
+userRouter.put("/:id", UserController.update);
+
 userRouter.get("/logout", UserController.logout);

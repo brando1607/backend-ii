@@ -16,4 +16,4 @@ cartRouter.delete("/:id", CartController.delete);
 
 cartRouter.post("/create", CartController.create);
 
-cartRouter.get("/", CartController.getAll);
+cartRouter.get("/:id", CartController.getById);
