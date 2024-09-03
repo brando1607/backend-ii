@@ -1,4 +1,4 @@
-import { productModel } from "../model/products.model.js";
+import { GetRepositories } from "../repository/index.repository.js";
 import { verifyToken } from "../utils/jwt.js";
 
 export class ProductsController {
@@ -13,18 +13,20 @@ export class ProductsController {
       return res.send("All elements are required");
     }
 
-    const product = await productModel.create({
+    const product = {
       name,
       price,
       stock,
       seller: `${tokenData.first_name} ${tokenData.last_name}`,
-    });
+    };
+    const newProduct = await GetRepositories.productRepository.create(product);
     // res.redirect("/");
-    return res.status(200).send({ message: "product created", product });
+    return res.status(200).send({ message: "product created", newProduct });
   }
   static async getAll(req, res) {
     try {
-      const products = await productModel.find();
+      const products = await GetRepositories.productRepository.getAll();
+
       return res.status(200).send(products);
     } catch (error) {
       console.error(error);
@@ -33,7 +35,7 @@ export class ProductsController {
   static async getById(req, res) {
     const { id } = req.params;
     try {
-      const product = await productModel.findById(id);
+      const product = await GetRepositories.productRepository.getById({ id });
       return res.status(200).send(product);
     } catch (error) {
       console.error(error);
