@@ -1,9 +1,12 @@
-import { generateToken } from "../utils/jwt.js";
+import { GetRepositories } from "../repository/index.repository.js";
 
 export class AuthController {
   static async register(req, res) {
     // return res.redirect("/login");
-    return res.status(200).send({ message: "user created", user: req.user });
+    const user = req.user;
+    // return res.status(200).send({ message: "user created", user: req.user });
+    const userRegistered = GetRepositories.authRepository.register({ user });
+    return res.status(200).send({ message: "user registered", userRegistered });
   }
   static registerFail(req, res) {
     //return res.redirect('/registerError')
@@ -11,22 +14,17 @@ export class AuthController {
   }
 
   static async login(req, res) {
-    const payload = {
-      email: req.user.email,
-      role: req.user.role,
-      first_name: req.user.first_name,
-      last_name: req.user.last_name,
-      age: req.user.age,
-    };
+    const user = req.user;
 
-    const token = generateToken(payload);
+    const userLogin = await GetRepositories.authRepository.login({ user });
 
-    res.cookie("token", token, {
+    res.cookie("token", userLogin, {
       maxAge: 1000 * 60 * 3,
       httpOnly: true,
     });
     // return res.redirect("/api/auth/current");
-    return res.status(200).send({ message: "Logged in" });
+    return res.status(200).send({ message: "Login successfull" });
+    // return res.status(200).send({ message: "Logged in" });
   }
   static loginError(req, res) {
     //return res.redirect('/loginError')
@@ -34,6 +32,8 @@ export class AuthController {
   }
   static async current(req, res) {
     // return res.redirect("/current");
-    return res.status(200).send({ message: "user logged in", user: req.user });
+    return res
+      .status(200)
+      .send({ message: "user is logged in", user: req.user });
   }
 }

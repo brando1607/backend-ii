@@ -1,10 +1,10 @@
-import { userModel } from "../model/user.model.js";
-import { createHash } from "../utils/hashPassword.js";
+import { GetRepositories } from "../repository/index.repository.js";
 
 export class UserController {
   static async getAll(req, res) {
     try {
-      return res.send(await userModel.find());
+      const users = await GetRepositories.userRepository.getAll();
+      return res.send(users);
     } catch (error) {
       console.error(error);
     }
@@ -12,46 +12,23 @@ export class UserController {
   static async getById(req, res) {
     const { id } = req.params;
     try {
-      const user = await userModel.findById(id);
+      const user = await GetRepositories.userRepository.getById({ id });
       return res.status(200).send(user);
     } catch (error) {
       console.error(error);
     }
   }
   static async update(req, res) {
-    const { id } = req.params;
-    const body = req.body;
-    const elementsToChange = Object.keys(body);
+    const data = {
+      id: req.params.id,
+      body: req.body,
+      elementsToChange: Object.keys(req.body),
+    };
 
     try {
-      const user = await userModel.findById(id);
-
-      if (!user) {
-        return res.status(400).send(`User not found`);
-      }
-
-      if (elementsToChange.includes("password")) {
-        const newPassword = await createHash(body.password);
-
-        await userModel.findByIdAndUpdate(id, {
-          password: newPassword,
-        });
-      }
-
-      const updatesToUser = {};
-
-      elementsToChange.forEach((e) => {
-        if (e !== "password") {
-          updatesToUser[e] = body[e];
-        }
-      });
-
-      if (Object.keys(updatesToUser).length > 0) {
-        await userModel.findByIdAndUpdate(id, updatesToUser, { new: true });
-      }
-
       //return res.redirect("/login");
-      return res.status(201).json({ message: `${elementsToChange} changed` });
+      const userUpdated = await GetRepositories.userRepository.update({ data });
+      return res.status(201).send(userUpdated);
     } catch (error) {
       return res.status(500).send(error);
     }
@@ -63,10 +40,9 @@ export class UserController {
     return res.status(200).send({ message: "Logged out" });
   }
   static async delete(req, res) {
-    const id = req.params.id;
+    const { id } = req.params;
 
-    const user = await userModel.findById(id);
-    await user.deleteOne();
-    return res.send(`user deleted`);
+    const userDeleted = await GetRepositories.userRepository.delete({ id });
+    return res.send(userDeleted);
   }
 }

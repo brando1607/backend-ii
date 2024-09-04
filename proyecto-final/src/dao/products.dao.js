@@ -16,6 +16,7 @@ export class ProductDao {
       if (error.messageFormat === undefined) {
         return `Product not found`;
       }
+      console.error(error);
     }
   }
   static async create(product) {
