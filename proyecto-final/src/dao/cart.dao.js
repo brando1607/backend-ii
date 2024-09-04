@@ -8,7 +8,7 @@ export class CartDao {
       return await cartModel.findById(id);
     } catch (error) {
       if (error.messageFormat === undefined) {
-        return `Cart not found`;
+        return { message: `Cart not found` };
       }
       console.error(error);
     }
@@ -18,17 +18,17 @@ export class CartDao {
       const user = await userModel.findOne({ email: tokenData.email });
 
       if (!tokenData) {
-        return `User not found, must be logged in to create cart`;
+        return { message: `User not found, must be logged in to create cart` };
       }
       const userHasCart = user.cart ? true : false;
 
       if (userHasCart) {
-        return `User already has a cart`;
+        return { message: `User already has a cart` };
       } else {
         const newCart = await cartModel.create({ products: [] });
         user.cart = newCart._id;
         user.save();
-        return `Cart created`;
+        return { message: `Cart created` };
       }
     } catch (error) {
       console.error(error);
@@ -41,10 +41,10 @@ export class CartDao {
       const cartOwner = await userModel.findOne({ cart: id });
       cartOwner.cart = null;
       cartOwner.save();
-      return `cart deleted`;
+      return { message: `cart deleted` };
     } catch (error) {
       if (error.messageFormat === undefined) {
-        return `Cart not found`;
+        return { message: `Cart not found` };
       }
       console.error(error);
     }
@@ -77,7 +77,9 @@ export class CartDao {
         );
 
         if (userCart.products[productIndex].quantity === productExists.stock) {
-          return `Amount in cart exceeds stock, product can't be added`;
+          return {
+            message: `Amount in cart exceeds stock, product can't be added`,
+          };
         } else {
           userCart.products[productIndex].quantity += 1;
           await userCart.save();

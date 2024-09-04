@@ -18,7 +18,7 @@ export class CartController {
       const userCreated = await GetRepositories.carRepository.create({
         tokenData,
       });
-      return res.status(200).send({ message: userCreated });
+      return res.status(200).send(userCreated);
     } catch (error) {
       console.error(error);
     }
@@ -68,7 +68,7 @@ export class CartController {
 
     try {
       const cartDeleted = await GetRepositories.carRepository.delete({ id });
-      return res.status(200).send({ message: cartDeleted });
+      return res.status(200).send(cartDeleted);
     } catch (error) {
       console.error();
     }

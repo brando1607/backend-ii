@@ -21,7 +21,8 @@ export class ProductDao {
   }
   static async create(product) {
     try {
-      return await productModel.create(product);
+      const result = await productModel.create(product);
+      return { message: "product created", result };
     } catch (error) {
       console.error(error);
     }

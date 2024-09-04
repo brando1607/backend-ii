@@ -1,12 +1,11 @@
-import { GetRepositories } from "../repository/index.repository.js";
+import { generateToken } from "../utils/jwt.js";
 
 export class AuthController {
   static async register(req, res) {
     // return res.redirect("/login");
     const user = req.user;
-    // return res.status(200).send({ message: "user created", user: req.user });
-    const userRegistered = GetRepositories.authRepository.register({ user });
-    return res.status(200).send({ message: "user registered", userRegistered });
+
+    return res.status(200).send({ message: "user registered", user });
   }
   static registerFail(req, res) {
     //return res.redirect('/registerError')
@@ -16,9 +15,17 @@ export class AuthController {
   static async login(req, res) {
     const user = req.user;
 
-    const userLogin = await GetRepositories.authRepository.login({ user });
+    const payload = {
+      email: user.email,
+      role: user.role,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      age: user.age,
+    };
 
-    res.cookie("token", userLogin, {
+    const token = generateToken(payload);
+
+    res.cookie("token", token, {
       maxAge: 1000 * 60 * 3,
       httpOnly: true,
     });

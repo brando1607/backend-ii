@@ -21,7 +21,7 @@ export class ProductsController {
     };
     const newProduct = await GetRepositories.productRepository.create(product);
     // res.redirect("/");
-    return res.status(200).send({ message: "product created", newProduct });
+    return res.status(200).send(newProduct);
   }
   static async getAll(req, res) {
     try {

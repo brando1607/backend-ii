@@ -64,7 +64,7 @@ export class UserDao {
       const user = await userModel.findById(id);
 
       await user.deleteOne();
-      return `user ${user.first_name} deleted`;
+      return { message: `user ${user.first_name} deleted` };
     } catch (error) {
       if (error.messageFormat === undefined) {
         return `User not found`;
