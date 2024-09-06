@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { CartController } from "../controller/cart.controller.js";
+import { validate, GetDtos } from "../dtos/index.dto.js";
 
 export const cartRouter = Router();
 
@@ -8,12 +9,12 @@ cartRouter.delete(
   CartController.removeProduct
 );
 
-cartRouter.post("/:id/purchase", CartController.purchase);
+cartRouter.post("/:cartId/purchase", CartController.purchase);
 
 cartRouter.post("/add-to-cart", CartController.addProduct);
 
-cartRouter.delete("/:id", CartController.delete);
+cartRouter.delete("/:cartId", CartController.delete);
 
-cartRouter.post("/create", CartController.create);
+cartRouter.post("/create", validate(GetDtos.cartDto), CartController.create);
 
-cartRouter.get("/:id", CartController.getById);
+cartRouter.get("/:cartId", CartController.getById);

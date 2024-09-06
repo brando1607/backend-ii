@@ -5,13 +5,13 @@ export class UserRepository {
   async getAll() {
     return await this.dao.getAll();
   }
-  async getById({ id }) {
-    return await this.dao.getById({ id });
+  async getById({ userId }) {
+    return await this.dao.getById({ userId });
   }
   async update(product) {
     return await this.dao.update(product);
   }
-  async delete({ id }) {
-    return await this.dao.delete({ id });
+  async delete({ userId }) {
+    return await this.dao.delete({ userId });
   }
 }

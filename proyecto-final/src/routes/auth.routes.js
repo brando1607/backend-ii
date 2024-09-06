@@ -1,13 +1,13 @@
 import { Router } from "express";
-import passport from "passport";
 import { passportCall } from "../middlewares/passport.middleware.js";
 import { AuthController } from "../controller/auth.controller.js";
-
+import { validate, GetDtos, partialValidate } from "../dtos/index.dto.js";
 export const authRouter = Router();
 
 authRouter.post(
   "/register",
-  passport.authenticate("register", {
+  validate(GetDtos.userDto),
+  passportCall("register", {
     session: false,
     failureRedirect: "/api/user/register-fail",
   }),
@@ -18,7 +18,8 @@ authRouter.post("/register-fail", AuthController.registerFail);
 
 authRouter.post(
   "/login",
-  passport.authenticate("login", {
+  partialValidate(GetDtos.userDto),
+  passportCall("login", {
     session: false,
     failureRedirect: "/api/auth/login-error",
   }),

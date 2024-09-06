@@ -33,10 +33,40 @@ export class ProductsController {
     }
   }
   static async getById(req, res) {
-    const { id } = req.params;
+    const { productId } = req.params;
     try {
-      const product = await GetRepositories.productRepository.getById({ id });
+      const product = await GetRepositories.productRepository.getById({
+        productId,
+      });
       return res.status(200).send(product);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  static async update(req, res) {
+    const data = {
+      id: req.params.productId,
+      body: req.body,
+      elementsToChange: Object.keys(req.body),
+    };
+
+    try {
+      //return res.redirect("/login");
+      const productUpdated = await GetRepositories.productRepository.update({
+        data,
+      });
+      return res.status(201).send(productUpdated);
+    } catch (error) {
+      return res.status(500).send(error);
+    }
+  }
+  static async delete(req, res) {
+    const { productId } = req.params;
+    try {
+      const result = await GetRepositories.productRepository.delete({
+        productId,
+      });
+      return res.status(201).send(result);
     } catch (error) {
       console.error(error);
     }

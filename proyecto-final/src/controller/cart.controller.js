@@ -3,9 +3,9 @@ import { GetRepositories } from "../repository/index.repository.js";
 
 export class CartController {
   static async getById(req, res) {
-    const { id } = req.params;
+    const { cartId } = req.params;
     try {
-      const userCart = await GetRepositories.carRepository.getById({ id });
+      const userCart = await GetRepositories.carRepository.getById({ cartId });
       return res.status(200).send(userCart);
     } catch (error) {
       console.error(error);
@@ -13,10 +13,12 @@ export class CartController {
   }
   static async create(req, res) {
     const tokenData = verifyToken(req.cookies.token);
+    const body = req.body;
 
     try {
       const userCreated = await GetRepositories.carRepository.create({
         tokenData,
+        body,
       });
       return res.status(200).send(userCreated);
     } catch (error) {
@@ -52,11 +54,11 @@ export class CartController {
     }
   }
   static async purchase(req, res) {
-    const { id } = req.params;
+    const { cartId } = req.params;
     try {
       // res.redirect("/checkout");
       const purchaseCompleted = await GetRepositories.carRepository.purchase({
-        id,
+        cartId,
       });
       return res.status(200).send(purchaseCompleted);
     } catch (error) {
@@ -64,10 +66,12 @@ export class CartController {
     }
   }
   static async delete(req, res) {
-    const { id } = req.params;
+    const { cartId } = req.params;
 
     try {
-      const cartDeleted = await GetRepositories.carRepository.delete({ id });
+      const cartDeleted = await GetRepositories.carRepository.delete({
+        cartId,
+      });
       return res.status(200).send(cartDeleted);
     } catch (error) {
       console.error();

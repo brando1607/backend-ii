@@ -2,14 +2,14 @@ export class CartRepository {
   constructor(dao) {
     this.dao = dao;
   }
-  async create({ tokenData }) {
-    return await this.dao.create({ tokenData });
+  async create({ tokenData, body }) {
+    return await this.dao.create({ tokenData, body });
   }
-  async getById({ id }) {
-    return await this.dao.getById({ id });
+  async getById({ cartId }) {
+    return await this.dao.getById({ cartId });
   }
-  async delete({ id }) {
-    return await this.dao.delete({ id });
+  async delete({ cartId }) {
+    return await this.dao.delete({ cartId });
   }
   async addProduct({ tokenData, body }) {
     return await this.dao.addProduct({ tokenData, body });
@@ -17,7 +17,7 @@ export class CartRepository {
   async removeProduct({ params }) {
     return await this.dao.removeProduct({ params });
   }
-  async purchase({ id }) {
-    return await this.dao.purchase({ id });
+  async purchase({ cartId }) {
+    return await this.dao.purchase({ cartId });
   }
 }

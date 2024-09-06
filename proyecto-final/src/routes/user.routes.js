@@ -7,10 +7,10 @@ export const userRouter = Router();
 
 userRouter.get("/", UserController.getAll);
 
-userRouter.get("/:id", UserController.getById);
+userRouter.get("/:userId", UserController.getById);
 
-userRouter.delete("/delete/:id", UserController.delete);
+userRouter.delete("/delete/:userId", UserController.delete);
 
-userRouter.put("/:id", UserController.update);
+userRouter.put("/:userId", UserController.update);
 
 userRouter.get("/logout", UserController.logout);

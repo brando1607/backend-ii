@@ -39,8 +39,10 @@ export class AuthController {
   }
   static async current(req, res) {
     // return res.redirect("/current");
-    return res
-      .status(200)
-      .send({ message: "user is logged in", user: req.user });
+    const user = {
+      name: `${req.user.first_name} ${req.user.last_name}`,
+      age: req.user.age,
+    };
+    return res.status(200).send({ message: "user is logged in", user: user });
   }
 }

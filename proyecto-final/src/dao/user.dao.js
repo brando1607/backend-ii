@@ -5,8 +5,8 @@ export class UserDao {
   static async getAll() {
     return await userModel.find();
   }
-  static async getById({ id }) {
-    return await userModel.findById(id);
+  static async getById({ userId }) {
+    return await userModel.findById(userId);
   }
   static async update({ data }) {
     const { id, body, elementsToChange } = data;
@@ -45,11 +45,22 @@ export class UserDao {
         }
       });
 
+      if (elementsToChange.includes("cart")) {
+        delete updatesToUser.cart;
+      }
+
       if (Object.keys(updatesToUser).length > 0) {
         await userModel.findByIdAndUpdate(id, updatesToUser, { new: true });
       }
 
-      const result = { message: `${elementsToChange} changed` };
+      const result = {
+        message: `${
+          elementsToChange.length > 0
+            ? `Elements changed, if cart was included, it was not modified`
+            : `No elements were sent to modify`
+        }`,
+        user,
+      };
       return result;
     } catch (error) {
       if (error.messageFormat === undefined) {
@@ -59,9 +70,9 @@ export class UserDao {
       console.error(error);
     }
   }
-  static async delete({ id }) {
+  static async delete({ userId }) {
     try {
-      const user = await userModel.findById(id);
+      const user = await userModel.findById(userId);
 
       await user.deleteOne();
       return { message: `user ${user.first_name} deleted` };

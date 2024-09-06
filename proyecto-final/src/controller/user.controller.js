@@ -10,9 +10,9 @@ export class UserController {
     }
   }
   static async getById(req, res) {
-    const { id } = req.params;
+    const { userId } = req.params;
     try {
-      const user = await GetRepositories.userRepository.getById({ id });
+      const user = await GetRepositories.userRepository.getById({ userId });
       return res.status(200).send(user);
     } catch (error) {
       console.error(error);
@@ -20,7 +20,7 @@ export class UserController {
   }
   static async update(req, res) {
     const data = {
-      id: req.params.id,
+      id: req.params.userId,
       body: req.body,
       elementsToChange: Object.keys(req.body),
     };
@@ -40,9 +40,9 @@ export class UserController {
     return res.status(200).send({ message: "Logged out" });
   }
   static async delete(req, res) {
-    const { id } = req.params;
+    const { userId } = req.params;
 
-    const userDeleted = await GetRepositories.userRepository.delete({ id });
+    const userDeleted = await GetRepositories.userRepository.delete({ userId });
     return res.send(userDeleted);
   }
 }
