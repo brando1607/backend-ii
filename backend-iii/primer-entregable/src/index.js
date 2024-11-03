@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import { authRouter } from "./routes/auth.routes.js";
 import { userRouter } from "./routes/user.routes.js";
 import { cartRouter } from "./routes/cart.routes.js";
+import { mocksRouter } from "./routes/mocks.routes.js";
 import { productsRouter } from "./routes/products.routes.js";
 import passport from "passport";
 import { initializePassport } from "./config/passport.config.js";
@@ -27,6 +28,7 @@ app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/cart", cartRouter);
+app.use("/api/mocks", mocksRouter);
 
 //passport config
 initializePassport();
