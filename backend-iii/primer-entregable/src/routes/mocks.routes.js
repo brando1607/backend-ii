@@ -8,4 +8,4 @@ mocksRouter.get("/users", MocksController.getUsers);
 
 mocksRouter.get("/products/:n", MocksController.createMockProducts);
 
-mocksRouter.get("/products/:n", MocksController.getProducts);
+mocksRouter.get("/products", MocksController.getProducts);

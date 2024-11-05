@@ -1,5 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
+import { winston } from "./middlewares/winston.middleware.js";
+import { errorHandler } from "./middlewares/errorHandler.middleware.js";
 import mongoose from "mongoose";
 import { authRouter } from "./routes/auth.routes.js";
 import { userRouter } from "./routes/user.routes.js";
@@ -8,18 +10,16 @@ import { mocksRouter } from "./routes/mocks.routes.js";
 import { productsRouter } from "./routes/products.routes.js";
 import passport from "passport";
 import { initializePassport } from "./config/passport.config.js";
-import { config } from "./config/config.js";
+import { env } from "./utils/env.utils.js";
 
 //Express config
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
-
 //mongo config
 mongoose
-  .connect(config.MONGO_URI)
+  .connect(env.MONGO_URI)
   .then(() => console.log("DB connected"))
   .catch((error) => console.log({ error: error.message }));
 
@@ -35,6 +35,10 @@ initializePassport();
 app.use(passport.initialize());
 
 //Servidor
-app.listen(config.PORT, () => {
-  console.log(`Server listening on port http://localhost:${config.PORT}`);
+app.listen(env.PORT, () => {
+  console.log(`Server listening on port http://localhost:${env.PORT}`);
 });
+
+//middlewares config
+app.use(winston);
+app.use(errorHandler);

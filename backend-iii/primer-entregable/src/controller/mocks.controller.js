@@ -1,10 +1,13 @@
 import { faker } from "@faker-js/faker";
+import { logger } from "../utils/winston.utils.js";
+import { CustomError } from "../utils/errors/customError.utils.js";
+import { errors } from "../utils/errors/errors.js";
 import { userModel } from "../model/user.model.js";
 import { productModel } from "../model/products.model.js";
 
 export class MocksController {
   static async createMockUsers(req, res) {
-    const amount = req.params.n;
+    const amount = Number(req.params.n);
     try {
       for (let i = 1; i <= amount; i++) {
         let firstName = faker.person.firstName().toLowerCase();
@@ -25,13 +28,18 @@ export class MocksController {
       console.error(error);
     }
   }
-  static async getUsers(req, res) {
+  static async getUsers(req, res, next) {
     try {
       const users = await userModel.find();
+      if (users.length < 1) {
+        return CustomError.newError(errors.noContent);
+      } else {
+        logger.info(users);
 
-      return res.status(200).json(users);
+        return res.status(200).json(users);
+      }
     } catch (error) {
-      console.error(error);
+      next(error);
     }
   }
   static async createMockProducts(req, res) {
