@@ -3,11 +3,7 @@ import cookieParser from "cookie-parser";
 import { winston } from "./middlewares/winston.middleware.js";
 import { errorHandler } from "./middlewares/errorHandler.middleware.js";
 import mongoose from "mongoose";
-import { authRouter } from "./routes/auth.routes.js";
-import { userRouter } from "./routes/user.routes.js";
-import { cartRouter } from "./routes/cart.routes.js";
-import { mocksRouter } from "./routes/mocks.routes.js";
-import { productsRouter } from "./routes/products.routes.js";
+import { RouterIndex } from "./routes/index.routes.js";
 import passport from "passport";
 import { initializePassport } from "./config/passport.config.js";
 import { env } from "./utils/env.utils.js";
@@ -24,11 +20,11 @@ mongoose
   .catch((error) => console.log({ error: error.message }));
 
 //router config
-app.use("/api/user", userRouter);
-app.use("/api/auth", authRouter);
-app.use("/api/products", productsRouter);
-app.use("/api/cart", cartRouter);
-app.use("/api/mocks", mocksRouter);
+app.use("/api/user", RouterIndex.userRouter);
+app.use("/api/auth", RouterIndex.authRouter);
+app.use("/api/products", RouterIndex.productsRouter);
+app.use("/api/cart", RouterIndex.cartRouter);
+app.use("/api/mocks", RouterIndex.mocksRouter);
 
 //passport config
 initializePassport();
