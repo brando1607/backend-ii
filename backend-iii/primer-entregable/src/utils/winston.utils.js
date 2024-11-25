@@ -9,10 +9,5 @@ addColors(colors);
 export const logger = createLogger({
   levels,
   format: colorize(),
-  transports: [
-    new Console({ level: "http", format: simple() }),
-    // new Console({ level: "info", format: simple() }),
-    // new Console({ level: "error", format: simple() }),
-    // new Console({ level: "fatal", format: simple() }),
-  ],
+  transports: [new Console({ level: "http", format: simple() })],
 });
